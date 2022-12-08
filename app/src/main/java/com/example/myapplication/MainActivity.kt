@@ -2,15 +2,23 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 
 class MainActivity : AppCompatActivity() {
     var state = R.drawable.check_circle_outline_black_24dp
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val image = findViewById<ImageView>(R.id.imageView)
+
+        savedInstanceState?.let {
+            state = savedInstanceState.getInt("IMAGE")
+            image.setImageDrawable(getDrawable(state))
+        }
+
         image.setOnClickListener{
             state = when (state){
                 R.drawable.check_circle_outline_black_24dp -> R.drawable.done_black_24dp
@@ -19,5 +27,11 @@ class MainActivity : AppCompatActivity() {
             }
             image.setImageDrawable(getDrawable(state))
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("IMAGE", state)
+        Log.i("LIFECYCLE", "saveInstanceState $state")
     }
 }
